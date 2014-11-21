@@ -1,1 +1,6 @@
-VGALab.cache
+*.cache
+*.sim
+*.runs
+vivado.jou
+vivado.log
+vivado_pid*.str
