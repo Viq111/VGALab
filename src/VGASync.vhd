@@ -34,29 +34,33 @@ architecture Behavioral of VGASync is
     type STATE_TYPE is (init, HBP_wait, drawLine, HFP_wait, HRetrace_wait, VFP_wait, VRetrace_wait, VBP_wait);
     signal state : STATE_TYPE := init;
     signal counter : INTEGER;
+    signal internalX : INTEGER;
+    signal internalY : INTEGER;
 begin
+    currentX <= internalX;
+    currentY <= internalY;
     FSMAffichage : Process(VGAClk)
     begin
         If (VGAClk'Event and VGAClk = '1') then
             Case state is
                 when init =>
-                    currentX <= 0;
-                    currentY <= 0;
-                    drawAvaible <= '0';
+                    internalX <= 0;
+                    internalY <= 0;
+                    drawAvailable <= '0';
                     hSync <= '0';
                     vSync <= '0';
                     counter <= 0;
-                    state <= HPB_wait;
-                when HPB_wait =>
+                    state <= HBP_wait;
+                when HBP_wait =>
                     counter <= counter + 1;
                     If (counter >= HBP) then
                         counter <= 0;
                         state <= drawLine;
                     End If;
                 when drawLine =>
-                    currentX <= currentX + 1;
-                    If (currentX >= HR) then
-                        currentX <= 0;
+                    internalX <= internalX + 1;
+                    If (internalX + 1 >= HR) then
+                        internalX <= 0;
                         state <= HFP_wait;
                     End If;
                 when HFP_wait =>
@@ -65,19 +69,19 @@ begin
                         counter <= 0;
                         state <= HRetrace_wait;
                     End If;
-                when Hretrace_wait =>
+                when HRetrace_wait =>
                     counter <= counter +1;
                     If (counter >= HRet) then
                         counter <= 0;
-                        currentY <= currentY + 1;
-                        currentX <= 0;
+                        internalY <= internalY + 1;
+                        internalX <= 0;
                         -- If we are at the end of the line, go to VFP, otherwise go to next line
-                        If (currentY >= VR) then
+                        If (internalY + 1 >= VR) then
                             counter <= 0;
                             state <= VFP_wait;
                         Else
                             counter <= 0;
-                            state <= HPB_wait;
+                            state <= HBP_wait;
                         End If;
                     End If;
                 when VFP_wait =>
@@ -90,8 +94,8 @@ begin
                     counter <= counter + 1;
                     If (counter >= VRet) then
                         counter <= 0;
-                        currentX <= 0;
-                        currentY <= 0;
+                        internalX <= 0;
+                        internalY <= 0;
                         state <= VBP_wait;
                     End If;
                 when VBP_wait =>
