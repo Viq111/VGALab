@@ -47,26 +47,29 @@ begin
                     internalX <= 0;
                     internalY <= 0;
                     drawAvailable <= '0';
-                    hSync <= '0';
-                    vSync <= '0';
+                    hSync <= '1';
+                    vSync <= '1';
                     counter <= 0;
                     state <= HBP_wait;
                 when HBP_wait =>
                     counter <= counter + 1;
                     If (counter >= HBP) then
                         counter <= 0;
+                        drawAvailable <= '1';
                         state <= drawLine;
                     End If;
                 when drawLine =>
                     internalX <= internalX + 1;
                     If (internalX + 1 >= HR) then
                         internalX <= 0;
+                        drawAvailable <= '0';
                         state <= HFP_wait;
                     End If;
                 when HFP_wait =>
                     counter <= counter + 1;
                     If (counter >= HFP) then
                         counter <= 0;
+                        hSync <= '0';
                         state <= HRetrace_wait;
                     End If;
                 when HRetrace_wait =>
@@ -81,6 +84,7 @@ begin
                             state <= VFP_wait;
                         Else
                             counter <= 0;
+                            hSync <= '1';
                             state <= HBP_wait;
                         End If;
                     End If;
@@ -88,6 +92,7 @@ begin
                     counter <= counter + 1;
                     If (counter >= VFP) then
                         counter <= 0;
+                        vSync <= '0';
                         state <= VRetrace_wait;
                     End If;
                 when VRetrace_wait =>
@@ -96,6 +101,7 @@ begin
                         counter <= 0;
                         internalX <= 0;
                         internalY <= 0;
+                        vSync <= '1';
                         state <= VBP_wait;
                     End If;
                 when VBP_wait =>
