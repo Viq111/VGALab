@@ -27,90 +27,92 @@ architecture Behavioral of VGASync is
     constant HRet: INTEGER := 96;  --Horizontal retrace
     
     constant VR :  INTEGER := 480; --Vertical Resolution
-    constant VBP : INTEGER := 33 * (HBP + HR + HFP + HRet);  --Vertical Back Porch
-    constant VFP : INTEGER := 10 * (HBP + HR + HFP + HRet);  --Vertical Front Porch
-    constant VRet: INTEGER := 2 * (HBP + HR + HFP + HRet);   --Vertical Retrace
-    -- FSM
-    type STATE_TYPE is (init, HBP_wait, drawLine, HFP_wait, HRetrace_wait, VFP_wait, VRetrace_wait, VBP_wait);
-    signal state : STATE_TYPE := init;
-    signal counter : INTEGER;
-    signal internalX : INTEGER;
-    signal internalY : INTEGER;
+    constant VBP : INTEGER := 33;  --Vertical Back Porch -- Or 29 ???
+    constant VFP : INTEGER := 10;  --Vertical Front Porch
+    constant VRet: INTEGER := 2;   --Vertical Retrace
+    -- FSM 1&2
+    type FSM1_STATES is (VBP_wait, drawLine, VFP_wait, VRetrace);
+    type FSM2_STATES is (HBP_wait, drawColumn, HFP_wait, HRetrace);
+    signal stateFSM1 : FSM1_STATES := VBP_wait;
+    signal stateFSM2 : FSM2_STATES := HBP_wait;
+    signal counterFSM1 : INTEGER := 1; -- 1 because we will already have done 1 tick
+    signal counterFSM2 : INTEGER := 1; -- 1 because we will already have done 1 tick
+    signal internalX : INTEGER := 0;
+    signal internalY : INTEGER := 0;
 begin
     currentX <= internalX;
     currentY <= internalY;
-    FSMAffichage : Process(VGAClk)
+    -- ToDo: Add state1 = drawLine & state2 = draw -> drawAvailable
+    drawAvailable <= '1' when ((stateFSM1 = drawLine) and (stateFSM2 = drawColumn)) else '0';
+
+    FSM2Clk : Process(VGAClk)
+    variable lineClk : STD_LOGIC;
     begin
         If (VGAClk'Event and VGAClk = '1') then
-            Case state is
-                when init =>
-                    internalX <= 0;
-                    internalY <= 0;
-                    drawAvailable <= '0';
-                    hSync <= '1';
-                    vSync <= '1';
-                    counter <= 0;
-                    state <= HBP_wait;
+            Case stateFSM2 is
                 when HBP_wait =>
-                    counter <= counter + 1;
-                    If (counter >= HBP) then
-                        counter <= 0;
-                        drawAvailable <= '1';
-                        state <= drawLine;
+                    hSync <= '1';
+                    internalX <= 0;
+                    lineClk := '0';
+                    counterFSM2 <= counterFSM2 + 1;
+                    If (counterFSM2 >= HBP) then
+                        counterFSM2 <= 1; -- 1 because we will already have done 1 tick
+                        stateFSM2 <= drawColumn;
                     End If;
-                when drawLine =>
+                when drawColumn =>
                     internalX <= internalX + 1;
-                    If (internalX + 1 >= HR) then
-                        internalX <= 0;
-                        drawAvailable <= '0';
-                        state <= HFP_wait;
+                    If ( internalX + 1 >= HR) then
+                        counterFSM2 <= 1;
+                        stateFSM2 <= HFP_wait;
                     End If;
                 when HFP_wait =>
-                    counter <= counter + 1;
-                    If (counter >= HFP) then
-                        counter <= 0;
+                    counterFSM2 <= counterFSM2 + 1;
+                    If ( counterFSM2 >= HFP ) then
+                        counterFSM2 <= 1;
                         hSync <= '0';
-                        state <= HRetrace_wait;
+                        stateFSM2 <= HRetrace;
                     End If;
-                when HRetrace_wait =>
-                    counter <= counter +1;
-                    If (counter >= HRet) then
-                        counter <= 0;
-                        internalY <= internalY + 1;
-                        internalX <= 0;
-                        -- If we are at the end of the line, go to VFP, otherwise go to next line
-                        If (internalY + 1 >= VR) then
-                            counter <= 0;
-                            state <= VFP_wait;
-                        Else
-                            counter <= 0;
-                            hSync <= '1';
-                            state <= HBP_wait;
-                        End If;
-                    End If;
-                when VFP_wait =>
-                    counter <= counter + 1;
-                    If (counter >= VFP) then
-                        counter <= 0;
-                        vSync <= '0';
-                        state <= VRetrace_wait;
-                    End If;
-                when VRetrace_wait =>
-                    counter <= counter + 1;
-                    If (counter >= VRet) then
-                        counter <= 0;
-                        internalX <= 0;
-                        internalY <= 0;
-                        vSync <= '1';
-                        state <= VBP_wait;
-                    End If;
-                when VBP_wait =>
-                    counter <= counter + 1;
-                    If (counter >= VBP) then
-                        counter <= 0;
-                        state <= HBP_wait;
+                when HRetrace =>
+                    counterFSM2 <= counterFSM2 + 1;
+                    If ( counterFSM2 >= HRet ) then
+                        counterFSM2 <= 1;
+                        hSync <= '1';
+                        lineClk := '1';
+                        stateFSM2 <= HBP_wait;
                     End If;
             End Case;
+            If ( lineClk = '1' ) then
+                Case stateFSM1 is
+                    when VBP_wait =>
+                        internalY <= 0;
+                        vSync <= '1';
+                        counterFSM1 <= counterFSM1 + 1;
+                        If (counterFSM1 >= VBP) then
+                            counterFSM1 <= 1;
+                            stateFSM1 <= drawLine;
+                        End If;
+                    when drawLine =>
+                        internalY <= internalY + 1;
+                        If ( internalY + 1 >= VR) then
+                            counterFSM1 <= 1;
+                            stateFSM1 <= VFP_wait;
+                        End If;
+                    when VFP_wait =>
+                        counterFSM1 <= counterFSM1 + 1;
+                        If ( counterFSM1 >= VFP ) then
+                            counterFSM1 <= 1;
+                            vSync <= '0';
+                            stateFSM1 <= VRetrace;
+                        End If;
+                    when VRetrace =>
+                        counterFSM1 <= counterFSM1 + 1;
+                        If ( counterFSM1 >= VRet ) then
+                            counterFSM1 <= 1;
+                            vSync <= '1';
+                            stateFSM1 <= VBP_wait;
+                        End If;
+                End Case;
+            End If;
         End If;
     End Process;
-end Behavioral;
+End Behavioral;

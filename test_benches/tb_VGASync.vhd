@@ -30,7 +30,7 @@ END COMPONENT;
     signal hSync : STD_LOGIC;
     signal vSync : STD_LOGIC;
 constant clk_period : time := 10 ns;
-
+signal VGAClkCounter : INTEGER := 1; -- 1 because we will already have done 1 tick
 BEGIN
 -- Instantiate the Unit Under Test (UUT)
 uut: VGASync PORT MAP (
@@ -47,6 +47,7 @@ begin
     VGAClk <= '0';
     wait for clk_period/2;  --for 5 ns signal is '0'.
     VGAClk <= '1';
+    VGAClkCounter <= VGAClkCounter + 1;
     wait for clk_period/2;  --for 5 ns signal is '1'.
 end process;
 END;
