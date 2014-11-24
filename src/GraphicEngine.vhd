@@ -14,7 +14,7 @@ entity GraphicEngine is
     Port ( Clk : in STD_LOGIC;
     hSync : out STD_LOGIC;
     vSync : out STD_LOGIC;
-    RGB : out STD_LOGIC_VECTOR (0 to 2) );
+    RGB : out STD_LOGIC_VECTOR (0 to 11) );
 end GraphicEngine;
 
 architecture Behavioral of GraphicEngine is
@@ -39,10 +39,11 @@ architecture Behavioral of GraphicEngine is
     end component;
     -- Muxer
     component MUX
-        Port ( RGB : out STD_LOGIC_VECTOR (0 to 2) );
+        Port (  drawAvailable : in STD_LOGIC;
+                RGB : out STD_LOGIC_VECTOR (0 to 11) );
     end component;
 begin
     Clock : Clock_Generator port map ( Clk, VGAClk);
     Sync :  VGASync port map ( VGAClk, X, Y, drawAvailable, hSync, vSync);
-    Muxer : MUX port map ( RGB );
+    Muxer : MUX port map ( drawAvailable, RGB );
 end Behavioral;

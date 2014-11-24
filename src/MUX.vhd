@@ -11,10 +11,11 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity MUX is
-    Port ( RGB : out STD_LOGIC_VECTOR (0 to 2) );
+    Port ( drawAvailable : in STD_LOGIC;
+    RGB : out STD_LOGIC_VECTOR (0 to 11) );
 end MUX;
 
 architecture Behavioral of MUX is
 begin
-    RGB <= "100";
+    RGB <= "111100000000" when (drawAvailable = '1') else "000000000000";
 end Behavioral;

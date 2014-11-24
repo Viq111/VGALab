@@ -15,7 +15,7 @@ PORT (
     Clk : IN STD_LOGIC;
     hSync : OUT STD_LOGIC;
     vSync : OUT STD_LOGIC;
-    RGB : OUT STD_LOGIC_VECTOR (0 to 2)
+    RGB : OUT STD_LOGIC_VECTOR (0 to 11)
 );
 END COMPONENT;
 -- declare inputs and initialize them
@@ -24,7 +24,7 @@ END COMPONENT;
 -- declare outputs and initialize them
     signal hSync : STD_LOGIC;
     signal vSync : STD_LOGIC;
-    signal RGB : STD_LOGIC_VECTOR (0 to 2);
+    signal RGB : STD_LOGIC_VECTOR (0 to 11);
 constant clk_period : time := 10 ns;
 
 BEGIN

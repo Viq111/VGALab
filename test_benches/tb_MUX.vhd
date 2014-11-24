@@ -12,18 +12,21 @@ ARCHITECTURE behavior OF tb_MUX IS
 -- Component Declaration for the Unit Under Test (UUT)
 COMPONENT MUX
 PORT (
-    RGB : OUT STD_LOGIC_VECTOR(0 to 2)
+    drawAvailable : IN STD_LOGIC;
+    RGB : OUT STD_LOGIC_VECTOR(0 to 11)
 );
 END COMPONENT;
 -- declare inputs and initialize them
+    signal drawAvailable : STD_LOGIC;
 -- declare inouts and initialize them
 -- declare outputs and initialize them
-    signal RGB : STD_LOGIC_VECTOR(0 to 2);
+    signal RGB : STD_LOGIC_VECTOR(0 to 11);
 constant clk_period : time := 10 ns;
 
 BEGIN
 -- Instantiate the Unit Under Test (UUT)
 uut: MUX PORT MAP (
+    drawAvailable => drawAvailable,
     RGB => RGB
 );
 -- Stimulus process
