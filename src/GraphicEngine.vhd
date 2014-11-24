@@ -22,7 +22,9 @@ architecture Behavioral of GraphicEngine is
     signal X : INTEGER;
     signal Y : INTEGER;
     signal drawAvailable : STD_LOGIC;
-    signal RGB1 : STD_LOGIC_VECTOR (0 to 2);
+    -- All MUX
+    signal wallPresent : STD_LOGIC;
+    signal RGBWAll : STD_LOGIC_VECTOR (0 to 2);
     -- Clock Divider
     component Clock_Generator
         port( Clk : in std_logic;
@@ -46,15 +48,16 @@ architecture Behavioral of GraphicEngine is
                 RGB : out STD_LOGIC_VECTOR (0 to 11) );
     end component;
     -- Sprites
-    component WallSprite
-        Port ( X : in INTEGER;
-               Y : in INTEGER;
-               Clk : in STD_LOGIC;
-               RGB : out STD_LOGIC_VECTOR (0 to 2) );
+    component FixedWall
+	Port ( 	X : in INTEGER;
+            Y : in INTEGER;
+            Clk : in STD_LOGIC;
+            wallPresent : out STD_LOGIC;
+            RGB : out STD_LOGIC_VECTOR ( 0 to 2) );
     end component;
 begin
     Clock : Clock_Generator port map ( Clk, VGAClk);
     Sync :  VGASync port map ( VGAClk, X, Y, drawAvailable, hSync, vSync);
-    Wall : WallSprite port map (X, Y, Clk, RGB1);
-    Muxer : MUX port map ( drawAvailable, RGB1, RGB );
+    Wall : FixedWall port map (X, Y, Clk, wallPresent, RGBWall);
+    Muxer : MUX port map ( drawAvailable, RGBWall, RGB );
 end Behavioral;
