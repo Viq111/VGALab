@@ -21,6 +21,7 @@ signal currentX : INTEGER := 8;
 signal currentY : INTEGER := 8;
 signal direction : INTEGER := 0;
 signal vSyncCounter : INTEGER := 1;
+signal letsMove : STD_LOGIC := '0';
 -- Direction: 0 down idle, 1 down moving, 2 left idle, 3 left moving, 4 up idle, 5 up moving, 6 right idle, 7 right moving
 begin
 	-- ToDo : Manage External events
@@ -33,23 +34,28 @@ begin
 					3 when (command(0 to 3) = "0100") else	-- Only change when 1 button is pressed
 					5 when (command(0 to 3) = "0010") else	-- Only change when 1 button is pressed
 					7 when (command(0 to 3) = "0001") else  -- Only change when 1 button is pressed
-					else direction;		
+					direction;		
 	-- Second move the character each vSync (60 Hz)
 	MoveCharacter : Process(vSync)
 	begin
 		If (vSync'Event and vSync = '1') then
-			If (direction = 1 and X = (currentX + 17) and Y = (currentY + 8) and fixedWallPresent = '0' and breakWallPresent = '0') then
-				currentX <= currentX + 1;
-			End If;
-			If (direction = 3 and X = (currentX + 8) and Y = (currentY - 1) and fixedWallPresent = '0' and breakWallPresent = '0') then
-				currentY <= currentY - 1;
-			End If;
-			If (direction = 5 and X = (currentX - 1) and Y = (currentY + 8) and fixedWallPresent = '0' and breakWallPresent = '0') then
-				currentX <= currentX - 1;
-			End If;
-			If (direction = 7 and X = (currentX + 8) and Y = (currentY + 17) and fixedWallPresent = '0' and breakWallPresent = '0') then
-				currentY <= currentY + 1;
-			End If;
+			letsMove <= '1';
+		End If;
+		If (letsMove = '1' and direction = 1 and X = (currentX + 17) and Y = (currentY + 8) and fixedWallPresent = '0' and breakWallPresent = '0') then
+			letsMove <= '0';
+			currentX <= currentX + 1;
+		End If;
+		If (letsMove = '1' and direction = 3 and X = (currentX + 8) and Y = (currentY - 1) and fixedWallPresent = '0' and breakWallPresent = '0') then
+			letsMove <= '0';
+			currentY <= currentY - 1;
+		End If;
+		If (letsMove = '1' and direction = 5 and X = (currentX - 1) and Y = (currentY + 8) and fixedWallPresent = '0' and breakWallPresent = '0') then
+			letsMove <= '0';
+			currentX <= currentX - 1;
+		End If;
+		If (letsMove = '1' and direction = 7 and X = (currentX + 8) and Y = (currentY + 17) and fixedWallPresent = '0' and breakWallPresent = '0') then
+			letsMove <= '0';
+			currentY <= currentY + 1;
 		End If;
 	End Process;
 	relativeX <= (X - currentX) mod 16 when (X >= currentX and X < (currentX + 16)) else 0;
