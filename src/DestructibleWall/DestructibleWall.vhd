@@ -16,7 +16,8 @@ architecture Behavioral of DestructibleWall is
 	signal relativeX : INTEGER;
 	signal relativeY : INTEGER;
 	component DestructibleWallLocalCoordinates is
-		Port ( 	X : in INTEGER;
+		Port ( 	Clk : in STD_LOGIC;
+				X : in INTEGER;
 				Y : in INTEGER;
 				relativeX : out INTEGER;
 				relativeY : out INTEGER;
@@ -30,6 +31,6 @@ architecture Behavioral of DestructibleWall is
 	end component;
 begin
     wallPresent <= s_wallPresent;
-	conversion : DestructibleWallLocalCoordinates port map (X, Y, relativeX, relativeY, s_wallPresent);
+	conversion : DestructibleWallLocalCoordinates port map (Clk, X, Y, relativeX, relativeY, s_wallPresent);
 	sprite : DestructibleWallSprite port map(relativeX, relativeY, s_wallPresent, RGB);
 end Behavioral;
