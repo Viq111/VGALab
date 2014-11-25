@@ -48,6 +48,7 @@ architecture Behavioral of GraphicEngine is
         Port (  drawAvailable : in STD_LOGIC;
                 -- Add each Sprite here
                 RGB1 : in STD_LOGIC_VECTOR (0 to 2);
+                RGB2 : in STD_LOGIC_VECTOR (0 to 2);
                 RGB : out STD_LOGIC_VECTOR (0 to 11) );
     end component;
     -- Sprites
@@ -70,5 +71,5 @@ begin
     Sync :  VGASync port map ( VGAClk, X, Y, drawAvailable, hSync, vSync);
     Wall : FixedWall port map (X, Y, Clk, wallPresent, RGBWall);
 	BrakeWall : DestructibleWall port map (X, Y, Clk, BrakewallPresent, RGBBrakeWall);
-    Muxer : MUX port map ( drawAvailable, RGBWall, RGB );
+    Muxer : MUX port map ( drawAvailable, RGBWall, RGBBrakeWall, RGB );
 end Behavioral;
