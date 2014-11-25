@@ -12,7 +12,9 @@ end FixedWallLocalCoordinates;
 
 architecture Behavioral of FixedWallLocalCoordinates is
 begin
-	drawIt <= '1' when (((((X+8)/16) mod 2) = 0) and ((((Y+8)/16) mod 2) = 0)) else '0';
+	drawIt <=  '1' when (((((X+8)/16) mod 2) = 0) and ((((Y+8)/16) mod 2) = 0)) else
+	           '1' when ((X < 8) or (X >= 632) or (Y < 8) or (Y >= 472)) else
+	           '0';
 	relativeX <= (X+8) mod 16;
 	relativeY <= (Y+8) mod 16;
 end Behavioral;
