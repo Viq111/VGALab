@@ -11,22 +11,227 @@ end DestructibleWallSprite;
 
 architecture Behavioral of DestructibleWallSprite is
 begin
-	-- To-do : Change Sprite
 	-- Begin of sprite Code
-	-- From fixed_block.png - MODIFIED
-	RGB <=	"100" when ((drawIt = '1') and (relativeY < 3) and (relativeX = 3)) else
-			"100" when ((drawIt = '1') and (relativeY < 3) and (relativeX = 11)) else
-			"100" when ((drawIt = '1') and (relativeY = 3)) else
-			"100" when ((drawIt = '1') and (relativeY > 3) and (relativeY < 7) and (relativeX = 7)) else
-			"100" when ((drawIt = '1') and (relativeY > 3) and (relativeY < 7) and (relativeX = 15)) else
-			"100" when ((drawIt = '1') and (relativeY = 7)) else
-			"100" when ((drawIt = '1') and (relativeY > 7) and (relativeY < 11) and (relativeX = 3)) else
-			"100" when ((drawIt = '1') and (relativeY > 7) and (relativeY < 11) and (relativeX = 11)) else
-			"100" when ((drawIt = '1') and (relativeY = 11)) else
-			"100" when ((drawIt = '1') and (relativeY > 11) and (relativeY < 15) and (relativeX = 7)) else
-			"100" when ((drawIt = '1') and (relativeY > 11) and (relativeY < 15) and (relativeX = 15)) else
-			"100" when ((drawIt = '1') and (relativeY = 15)) else
-			"111" when (drawIt = '1') else
-			"000";
-	-- End of Sprite Code
+    -- From breakable_block1.png
+    RGB <=  "011" when ((drawIt = '1') and (relativeX = 0) and (relativeY = 1)) else
+            "011" when ((drawIt = '1') and (relativeX = 0) and (relativeY = 2)) else
+            "011" when ((drawIt = '1') and (relativeX = 0) and (relativeY = 3)) else
+            "011" when ((drawIt = '1') and (relativeX = 0) and (relativeY = 4)) else
+            "011" when ((drawIt = '1') and (relativeX = 0) and (relativeY = 5)) else
+            "011" when ((drawIt = '1') and (relativeX = 0) and (relativeY = 6)) else
+            "011" when ((drawIt = '1') and (relativeX = 0) and (relativeY = 9)) else
+            "011" when ((drawIt = '1') and (relativeX = 0) and (relativeY = 10)) else
+            "011" when ((drawIt = '1') and (relativeX = 0) and (relativeY = 11)) else
+            "011" when ((drawIt = '1') and (relativeX = 0) and (relativeY = 12)) else
+            "011" when ((drawIt = '1') and (relativeX = 0) and (relativeY = 13)) else
+            "011" when ((drawIt = '1') and (relativeX = 0) and (relativeY = 14)) else
+            "011" when ((drawIt = '1') and (relativeX = 1) and (relativeY = 0)) else
+            "011" when ((drawIt = '1') and (relativeX = 1) and (relativeY = 1)) else
+            "011" when ((drawIt = '1') and (relativeX = 1) and (relativeY = 2)) else
+            "011" when ((drawIt = '1') and (relativeX = 1) and (relativeY = 3)) else
+            "011" when ((drawIt = '1') and (relativeX = 1) and (relativeY = 4)) else
+            "011" when ((drawIt = '1') and (relativeX = 1) and (relativeY = 5)) else
+            "011" when ((drawIt = '1') and (relativeX = 1) and (relativeY = 6)) else
+            "011" when ((drawIt = '1') and (relativeX = 1) and (relativeY = 7)) else
+            "011" when ((drawIt = '1') and (relativeX = 1) and (relativeY = 8)) else
+            "011" when ((drawIt = '1') and (relativeX = 1) and (relativeY = 9)) else
+            "011" when ((drawIt = '1') and (relativeX = 1) and (relativeY = 10)) else
+            "011" when ((drawIt = '1') and (relativeX = 1) and (relativeY = 11)) else
+            "011" when ((drawIt = '1') and (relativeX = 1) and (relativeY = 12)) else
+            "011" when ((drawIt = '1') and (relativeX = 1) and (relativeY = 13)) else
+            "010" when ((drawIt = '1') and (relativeX = 1) and (relativeY = 14)) else
+            "010" when ((drawIt = '1') and (relativeX = 1) and (relativeY = 15)) else
+            "011" when ((drawIt = '1') and (relativeX = 2) and (relativeY = 0)) else
+            "011" when ((drawIt = '1') and (relativeX = 2) and (relativeY = 1)) else
+            "001" when ((drawIt = '1') and (relativeX = 2) and (relativeY = 2)) else
+            "001" when ((drawIt = '1') and (relativeX = 2) and (relativeY = 3)) else
+            "001" when ((drawIt = '1') and (relativeX = 2) and (relativeY = 4)) else
+            "001" when ((drawIt = '1') and (relativeX = 2) and (relativeY = 5)) else
+            "001" when ((drawIt = '1') and (relativeX = 2) and (relativeY = 6)) else
+            "001" when ((drawIt = '1') and (relativeX = 2) and (relativeY = 7)) else
+            "001" when ((drawIt = '1') and (relativeX = 2) and (relativeY = 8)) else
+            "001" when ((drawIt = '1') and (relativeX = 2) and (relativeY = 9)) else
+            "001" when ((drawIt = '1') and (relativeX = 2) and (relativeY = 10)) else
+            "001" when ((drawIt = '1') and (relativeX = 2) and (relativeY = 11)) else
+            "001" when ((drawIt = '1') and (relativeX = 2) and (relativeY = 12)) else
+            "001" when ((drawIt = '1') and (relativeX = 2) and (relativeY = 13)) else
+            "010" when ((drawIt = '1') and (relativeX = 2) and (relativeY = 14)) else
+            "010" when ((drawIt = '1') and (relativeX = 2) and (relativeY = 15)) else
+            "011" when ((drawIt = '1') and (relativeX = 3) and (relativeY = 0)) else
+            "011" when ((drawIt = '1') and (relativeX = 3) and (relativeY = 1)) else
+            "001" when ((drawIt = '1') and (relativeX = 3) and (relativeY = 2)) else
+            "001" when ((drawIt = '1') and (relativeX = 3) and (relativeY = 4)) else
+            "001" when ((drawIt = '1') and (relativeX = 3) and (relativeY = 5)) else
+            "001" when ((drawIt = '1') and (relativeX = 3) and (relativeY = 6)) else
+            "001" when ((drawIt = '1') and (relativeX = 3) and (relativeY = 7)) else
+            "001" when ((drawIt = '1') and (relativeX = 3) and (relativeY = 8)) else
+            "001" when ((drawIt = '1') and (relativeX = 3) and (relativeY = 9)) else
+            "001" when ((drawIt = '1') and (relativeX = 3) and (relativeY = 10)) else
+            "001" when ((drawIt = '1') and (relativeX = 3) and (relativeY = 11)) else
+            "001" when ((drawIt = '1') and (relativeX = 3) and (relativeY = 13)) else
+            "010" when ((drawIt = '1') and (relativeX = 3) and (relativeY = 14)) else
+            "010" when ((drawIt = '1') and (relativeX = 3) and (relativeY = 15)) else
+            "011" when ((drawIt = '1') and (relativeX = 4) and (relativeY = 0)) else
+            "011" when ((drawIt = '1') and (relativeX = 4) and (relativeY = 1)) else
+            "001" when ((drawIt = '1') and (relativeX = 4) and (relativeY = 2)) else
+            "001" when ((drawIt = '1') and (relativeX = 4) and (relativeY = 3)) else
+            "001" when ((drawIt = '1') and (relativeX = 4) and (relativeY = 4)) else
+            "011" when ((drawIt = '1') and (relativeX = 4) and (relativeY = 5)) else
+            "001" when ((drawIt = '1') and (relativeX = 4) and (relativeY = 6)) else
+            "011" when ((drawIt = '1') and (relativeX = 4) and (relativeY = 7)) else
+            "001" when ((drawIt = '1') and (relativeX = 4) and (relativeY = 8)) else
+            "011" when ((drawIt = '1') and (relativeX = 4) and (relativeY = 9)) else
+            "001" when ((drawIt = '1') and (relativeX = 4) and (relativeY = 10)) else
+            "001" when ((drawIt = '1') and (relativeX = 4) and (relativeY = 11)) else
+            "001" when ((drawIt = '1') and (relativeX = 4) and (relativeY = 12)) else
+            "001" when ((drawIt = '1') and (relativeX = 4) and (relativeY = 13)) else
+            "010" when ((drawIt = '1') and (relativeX = 4) and (relativeY = 14)) else
+            "010" when ((drawIt = '1') and (relativeX = 4) and (relativeY = 15)) else
+            "011" when ((drawIt = '1') and (relativeX = 5) and (relativeY = 0)) else
+            "011" when ((drawIt = '1') and (relativeX = 5) and (relativeY = 1)) else
+            "001" when ((drawIt = '1') and (relativeX = 5) and (relativeY = 2)) else
+            "001" when ((drawIt = '1') and (relativeX = 5) and (relativeY = 3)) else
+            "001" when ((drawIt = '1') and (relativeX = 5) and (relativeY = 4)) else
+            "011" when ((drawIt = '1') and (relativeX = 5) and (relativeY = 5)) else
+            "011" when ((drawIt = '1') and (relativeX = 5) and (relativeY = 7)) else
+            "011" when ((drawIt = '1') and (relativeX = 5) and (relativeY = 9)) else
+            "001" when ((drawIt = '1') and (relativeX = 5) and (relativeY = 11)) else
+            "001" when ((drawIt = '1') and (relativeX = 5) and (relativeY = 12)) else
+            "001" when ((drawIt = '1') and (relativeX = 5) and (relativeY = 13)) else
+            "010" when ((drawIt = '1') and (relativeX = 5) and (relativeY = 14)) else
+            "010" when ((drawIt = '1') and (relativeX = 5) and (relativeY = 15)) else
+            "011" when ((drawIt = '1') and (relativeX = 6) and (relativeY = 0)) else
+            "011" when ((drawIt = '1') and (relativeX = 6) and (relativeY = 1)) else
+            "001" when ((drawIt = '1') and (relativeX = 6) and (relativeY = 2)) else
+            "001" when ((drawIt = '1') and (relativeX = 6) and (relativeY = 3)) else
+            "001" when ((drawIt = '1') and (relativeX = 6) and (relativeY = 4)) else
+            "011" when ((drawIt = '1') and (relativeX = 6) and (relativeY = 5)) else
+            "011" when ((drawIt = '1') and (relativeX = 6) and (relativeY = 7)) else
+            "011" when ((drawIt = '1') and (relativeX = 6) and (relativeY = 9)) else
+            "001" when ((drawIt = '1') and (relativeX = 6) and (relativeY = 11)) else
+            "001" when ((drawIt = '1') and (relativeX = 6) and (relativeY = 12)) else
+            "001" when ((drawIt = '1') and (relativeX = 6) and (relativeY = 13)) else
+            "010" when ((drawIt = '1') and (relativeX = 6) and (relativeY = 14)) else
+            "010" when ((drawIt = '1') and (relativeX = 6) and (relativeY = 15)) else
+            "011" when ((drawIt = '1') and (relativeX = 7) and (relativeY = 1)) else
+            "001" when ((drawIt = '1') and (relativeX = 7) and (relativeY = 2)) else
+            "001" when ((drawIt = '1') and (relativeX = 7) and (relativeY = 3)) else
+            "001" when ((drawIt = '1') and (relativeX = 7) and (relativeY = 4)) else
+            "011" when ((drawIt = '1') and (relativeX = 7) and (relativeY = 5)) else
+            "011" when ((drawIt = '1') and (relativeX = 7) and (relativeY = 7)) else
+            "011" when ((drawIt = '1') and (relativeX = 7) and (relativeY = 9)) else
+            "001" when ((drawIt = '1') and (relativeX = 7) and (relativeY = 11)) else
+            "001" when ((drawIt = '1') and (relativeX = 7) and (relativeY = 12)) else
+            "001" when ((drawIt = '1') and (relativeX = 7) and (relativeY = 13)) else
+            "010" when ((drawIt = '1') and (relativeX = 7) and (relativeY = 14)) else
+            "011" when ((drawIt = '1') and (relativeX = 8) and (relativeY = 1)) else
+            "001" when ((drawIt = '1') and (relativeX = 8) and (relativeY = 2)) else
+            "001" when ((drawIt = '1') and (relativeX = 8) and (relativeY = 3)) else
+            "001" when ((drawIt = '1') and (relativeX = 8) and (relativeY = 4)) else
+            "010" when ((drawIt = '1') and (relativeX = 8) and (relativeY = 5)) else
+            "010" when ((drawIt = '1') and (relativeX = 8) and (relativeY = 7)) else
+            "010" when ((drawIt = '1') and (relativeX = 8) and (relativeY = 9)) else
+            "001" when ((drawIt = '1') and (relativeX = 8) and (relativeY = 11)) else
+            "001" when ((drawIt = '1') and (relativeX = 8) and (relativeY = 12)) else
+            "001" when ((drawIt = '1') and (relativeX = 8) and (relativeY = 13)) else
+            "010" when ((drawIt = '1') and (relativeX = 8) and (relativeY = 14)) else
+            "011" when ((drawIt = '1') and (relativeX = 9) and (relativeY = 0)) else
+            "011" when ((drawIt = '1') and (relativeX = 9) and (relativeY = 1)) else
+            "001" when ((drawIt = '1') and (relativeX = 9) and (relativeY = 2)) else
+            "001" when ((drawIt = '1') and (relativeX = 9) and (relativeY = 3)) else
+            "001" when ((drawIt = '1') and (relativeX = 9) and (relativeY = 4)) else
+            "010" when ((drawIt = '1') and (relativeX = 9) and (relativeY = 5)) else
+            "010" when ((drawIt = '1') and (relativeX = 9) and (relativeY = 7)) else
+            "010" when ((drawIt = '1') and (relativeX = 9) and (relativeY = 9)) else
+            "001" when ((drawIt = '1') and (relativeX = 9) and (relativeY = 11)) else
+            "001" when ((drawIt = '1') and (relativeX = 9) and (relativeY = 12)) else
+            "001" when ((drawIt = '1') and (relativeX = 9) and (relativeY = 13)) else
+            "010" when ((drawIt = '1') and (relativeX = 9) and (relativeY = 14)) else
+            "010" when ((drawIt = '1') and (relativeX = 9) and (relativeY = 15)) else
+            "011" when ((drawIt = '1') and (relativeX = 10) and (relativeY = 0)) else
+            "011" when ((drawIt = '1') and (relativeX = 10) and (relativeY = 1)) else
+            "001" when ((drawIt = '1') and (relativeX = 10) and (relativeY = 2)) else
+            "001" when ((drawIt = '1') and (relativeX = 10) and (relativeY = 3)) else
+            "001" when ((drawIt = '1') and (relativeX = 10) and (relativeY = 4)) else
+            "010" when ((drawIt = '1') and (relativeX = 10) and (relativeY = 5)) else
+            "010" when ((drawIt = '1') and (relativeX = 10) and (relativeY = 7)) else
+            "010" when ((drawIt = '1') and (relativeX = 10) and (relativeY = 9)) else
+            "001" when ((drawIt = '1') and (relativeX = 10) and (relativeY = 11)) else
+            "001" when ((drawIt = '1') and (relativeX = 10) and (relativeY = 12)) else
+            "001" when ((drawIt = '1') and (relativeX = 10) and (relativeY = 13)) else
+            "010" when ((drawIt = '1') and (relativeX = 10) and (relativeY = 14)) else
+            "010" when ((drawIt = '1') and (relativeX = 10) and (relativeY = 15)) else
+            "011" when ((drawIt = '1') and (relativeX = 11) and (relativeY = 0)) else
+            "011" when ((drawIt = '1') and (relativeX = 11) and (relativeY = 1)) else
+            "001" when ((drawIt = '1') and (relativeX = 11) and (relativeY = 2)) else
+            "001" when ((drawIt = '1') and (relativeX = 11) and (relativeY = 3)) else
+            "001" when ((drawIt = '1') and (relativeX = 11) and (relativeY = 4)) else
+            "010" when ((drawIt = '1') and (relativeX = 11) and (relativeY = 5)) else
+            "010" when ((drawIt = '1') and (relativeX = 11) and (relativeY = 7)) else
+            "010" when ((drawIt = '1') and (relativeX = 11) and (relativeY = 9)) else
+            "001" when ((drawIt = '1') and (relativeX = 11) and (relativeY = 11)) else
+            "001" when ((drawIt = '1') and (relativeX = 11) and (relativeY = 12)) else
+            "001" when ((drawIt = '1') and (relativeX = 11) and (relativeY = 13)) else
+            "010" when ((drawIt = '1') and (relativeX = 11) and (relativeY = 14)) else
+            "010" when ((drawIt = '1') and (relativeX = 11) and (relativeY = 15)) else
+            "011" when ((drawIt = '1') and (relativeX = 12) and (relativeY = 0)) else
+            "011" when ((drawIt = '1') and (relativeX = 12) and (relativeY = 1)) else
+            "001" when ((drawIt = '1') and (relativeX = 12) and (relativeY = 2)) else
+            "001" when ((drawIt = '1') and (relativeX = 12) and (relativeY = 4)) else
+            "001" when ((drawIt = '1') and (relativeX = 12) and (relativeY = 5)) else
+            "001" when ((drawIt = '1') and (relativeX = 12) and (relativeY = 6)) else
+            "001" when ((drawIt = '1') and (relativeX = 12) and (relativeY = 7)) else
+            "001" when ((drawIt = '1') and (relativeX = 12) and (relativeY = 8)) else
+            "001" when ((drawIt = '1') and (relativeX = 12) and (relativeY = 9)) else
+            "001" when ((drawIt = '1') and (relativeX = 12) and (relativeY = 10)) else
+            "001" when ((drawIt = '1') and (relativeX = 12) and (relativeY = 11)) else
+            "001" when ((drawIt = '1') and (relativeX = 12) and (relativeY = 13)) else
+            "010" when ((drawIt = '1') and (relativeX = 12) and (relativeY = 14)) else
+            "010" when ((drawIt = '1') and (relativeX = 12) and (relativeY = 15)) else
+            "011" when ((drawIt = '1') and (relativeX = 13) and (relativeY = 0)) else
+            "011" when ((drawIt = '1') and (relativeX = 13) and (relativeY = 1)) else
+            "001" when ((drawIt = '1') and (relativeX = 13) and (relativeY = 2)) else
+            "001" when ((drawIt = '1') and (relativeX = 13) and (relativeY = 3)) else
+            "001" when ((drawIt = '1') and (relativeX = 13) and (relativeY = 4)) else
+            "001" when ((drawIt = '1') and (relativeX = 13) and (relativeY = 5)) else
+            "001" when ((drawIt = '1') and (relativeX = 13) and (relativeY = 6)) else
+            "001" when ((drawIt = '1') and (relativeX = 13) and (relativeY = 7)) else
+            "001" when ((drawIt = '1') and (relativeX = 13) and (relativeY = 8)) else
+            "001" when ((drawIt = '1') and (relativeX = 13) and (relativeY = 9)) else
+            "001" when ((drawIt = '1') and (relativeX = 13) and (relativeY = 10)) else
+            "001" when ((drawIt = '1') and (relativeX = 13) and (relativeY = 11)) else
+            "001" when ((drawIt = '1') and (relativeX = 13) and (relativeY = 12)) else
+            "001" when ((drawIt = '1') and (relativeX = 13) and (relativeY = 13)) else
+            "010" when ((drawIt = '1') and (relativeX = 13) and (relativeY = 14)) else
+            "010" when ((drawIt = '1') and (relativeX = 13) and (relativeY = 15)) else
+            "011" when ((drawIt = '1') and (relativeX = 14) and (relativeY = 0)) else
+            "011" when ((drawIt = '1') and (relativeX = 14) and (relativeY = 1)) else
+            "010" when ((drawIt = '1') and (relativeX = 14) and (relativeY = 2)) else
+            "010" when ((drawIt = '1') and (relativeX = 14) and (relativeY = 3)) else
+            "010" when ((drawIt = '1') and (relativeX = 14) and (relativeY = 4)) else
+            "010" when ((drawIt = '1') and (relativeX = 14) and (relativeY = 5)) else
+            "010" when ((drawIt = '1') and (relativeX = 14) and (relativeY = 6)) else
+            "010" when ((drawIt = '1') and (relativeX = 14) and (relativeY = 7)) else
+            "010" when ((drawIt = '1') and (relativeX = 14) and (relativeY = 8)) else
+            "010" when ((drawIt = '1') and (relativeX = 14) and (relativeY = 9)) else
+            "010" when ((drawIt = '1') and (relativeX = 14) and (relativeY = 10)) else
+            "010" when ((drawIt = '1') and (relativeX = 14) and (relativeY = 11)) else
+            "010" when ((drawIt = '1') and (relativeX = 14) and (relativeY = 12)) else
+            "010" when ((drawIt = '1') and (relativeX = 14) and (relativeY = 13)) else
+            "010" when ((drawIt = '1') and (relativeX = 14) and (relativeY = 14)) else
+            "010" when ((drawIt = '1') and (relativeX = 14) and (relativeY = 15)) else
+            "010" when ((drawIt = '1') and (relativeX = 15) and (relativeY = 1)) else
+            "010" when ((drawIt = '1') and (relativeX = 15) and (relativeY = 2)) else
+            "010" when ((drawIt = '1') and (relativeX = 15) and (relativeY = 3)) else
+            "010" when ((drawIt = '1') and (relativeX = 15) and (relativeY = 4)) else
+            "010" when ((drawIt = '1') and (relativeX = 15) and (relativeY = 5)) else
+            "010" when ((drawIt = '1') and (relativeX = 15) and (relativeY = 6)) else
+            "010" when ((drawIt = '1') and (relativeX = 15) and (relativeY = 9)) else
+            "010" when ((drawIt = '1') and (relativeX = 15) and (relativeY = 10)) else
+            "010" when ((drawIt = '1') and (relativeX = 15) and (relativeY = 11)) else
+            "010" when ((drawIt = '1') and (relativeX = 15) and (relativeY = 12)) else
+            "010" when ((drawIt = '1') and (relativeX = 15) and (relativeY = 13)) else
+            "010" when ((drawIt = '1') and (relativeX = 15) and (relativeY = 14)) else
+            "000";
+    -- End of Sprite Code
 end Behavioral;
