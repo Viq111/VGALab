@@ -28,11 +28,12 @@ begin
 	direction <= 	0 when (direction = 1) and (command(0 to 3) = "0000") else -- When no command is pressed idle
 					2 when (direction = 3) and (command(0 to 3) = "0000") else -- When no command is pressed idle
 					4 when (direction = 5) and (command(0 to 3) = "0000") else -- When no command is pressed idle
-					6 when (direction = 6) and (command(0 to 3) = "0000") else -- When no command is pressed idle
+					6 when (direction = 7) and (command(0 to 3) = "0000") else -- When no command is pressed idle
 					1 when (command(0 to 3) = "1000") else	-- Only change when 1 button is pressed
 					3 when (command(0 to 3) = "0100") else	-- Only change when 1 button is pressed
 					5 when (command(0 to 3) = "0010") else	-- Only change when 1 button is pressed
-					7 when (command(0 to 3) = "0001");		-- Only change when 1 button is pressed
+					7 when (command(0 to 3) = "0001") else  -- Only change when 1 button is pressed
+					else direction;		
 	-- Second move the character each vSync (60 Hz)
 	MoveCharacter : Process(vSync)
 	begin
@@ -51,8 +52,8 @@ begin
 			End If;
 		End If;
 	End Process;
-	relativeX <= X mod 16;
-	relativeY <= Y mod 16;
+	relativeX <= (X - currentX) mod 16 when (X >= currentX and X < (currentX + 16)) else 0;
+	relativeY <= (Y - currentY) mod 16 when (X >= currentX and X < (currentX + 16)) else 0;
 	-- Compute if we are on character
 	characterPresent <= '1' when (X >= currentX) and (X < (currentX + 16)) and (Y >= currentY) and (Y < (currentY + 16)) else
 						'0';

@@ -49,9 +49,9 @@ end process;
 -- Stimulus process
 stim_proc: process
 begin
+    command <= "000100";
+    wait for clk_period*1000000;
     command <= "000000";
-    wait for 3*clk_period;
-    -- Insert your tests
-   wait;
+    wait;
 end process;
 END;
