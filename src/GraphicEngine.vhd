@@ -26,9 +26,9 @@ architecture Behavioral of GraphicEngine is
 	signal external : INTEGER := 0;
 	signal s_vSync : STD_LOGIC;
     -- All MUX
-    signal fixedWallPresent : STD_LOGIC;
-	signal breakWallPresent : STD_LOGIC;
-	signal characterPresent : STD_LOGIC;
+    signal fixedWallPresent : STD_LOGIC := '0';
+	signal breakWallPresent : STD_LOGIC := '0';
+	signal characterPresent : STD_LOGIC := '0';
     signal RGBWall : STD_LOGIC_VECTOR (0 to 2);
 	signal RGBChar : STD_LOGIC_VECTOR (0 to 2);
     -- Clock Divider
