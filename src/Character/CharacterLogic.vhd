@@ -19,9 +19,10 @@ end CharacterLogic;
 architecture Behavioral of CharacterLogic is
 signal currentX : INTEGER := 8;
 signal currentY : INTEGER := 8;
+signal targetX  : INTEGER := 8;
+signal targetY  : INTEGER := 8;
 signal direction : INTEGER := 0;
 signal vSyncCounter : INTEGER := 1;
-signal letsMove : STD_LOGIC := '0';
 -- Direction: 0 down idle, 1 down moving, 2 left idle, 3 left moving, 4 up idle, 5 up moving, 6 right idle, 7 right moving
 begin
 	-- ToDo : Manage External events
@@ -37,32 +38,43 @@ begin
 					direction;		
 	-- Second move the character each vSync (60 Hz)
 	MoveCharacter : Process(Clk, vSync)
+	
 	begin
-		If (vSync'Event and vSync = '1') then
-			letsMove <= '1';
+		If (vSync'Event and vSync = '1') then -- On each tick, we move closer to our target
+			If (targetX > currentX) then
+				currentX <= currentX + 1;
+			End If;
+			If (targetX < currentX) then
+				currentX <= currentX - 1;
+			End If;
+			If (targetY > currentY) then
+				currentX <= currentX + 1;
+			End If;
+			If (targetY > currentY) then
+				currentY <= currentY + 1;
+			End If;
 		End If;
-		If (letsMove = '1' and direction = 1 and X = (currentX + 8) and Y = (currentY + 17) and fixedWallPresent = '0' and breakWallPresent = '0') then
-			letsMove <= '0';
-			currentY <= currentY + 1;
-		End If;
-		If (letsMove = '1' and direction = 3 and X = (currentX - 1) and Y = (currentY + 8) and fixedWallPresent = '0' and breakWallPresent = '0') then
-			letsMove <= '0';
-			currentX <= currentX - 1;
-		End If;
-		If (letsMove = '1' and direction = 5 and X = (currentX + 8) and Y = (currentY - 1) and fixedWallPresent = '0' and breakWallPresent = '0') then
-			letsMove <= '0';
-			currentY <= currentY - 1;
-		End If;
-		If (letsMove = '1' and direction = 7 and X = (currentX + 17) and Y = (currentY + 8) and fixedWallPresent = '0' and breakWallPresent = '0') then
-			letsMove <= '0';
-			currentX <= currentX + 1;
-		End If;
+		If (currentX = targetX and currentY = targetY) then -- Ok we are here, wait for an action from the user
+			If (direction = 1 and X = (currentX + 8) and Y = (currentY + 17) and fixedWallPresent = '0' and breakWallPresent = '0') then -- Going down
+				currentY <= currentY + 1;
+			End If;
+			If (direction = 3 and X = (currentX - 1) and Y = (currentY + 8) and fixedWallPresent = '0' and breakWallPresent = '0') then -- Going left
+				currentX <= currentX - 1;
+			End If;
+			If (direction = 5 and X = (currentX + 8) and Y = (currentY - 1) and fixedWallPresent = '0' and breakWallPresent = '0') then
+				currentY <= currentY - 1;
+			End If;
+			If (direction = 7 and X = (currentX + 17) and Y = (currentY + 8) and fixedWallPresent = '0' and breakWallPresent = '0') then
+				currentX <= currentX + 1;
+			End If;
+	   End If;
 	End Process;
 	relativeX <= (X - currentX) mod 16 when (X >= currentX and X < (currentX + 16)) else 0;
 	relativeY <= (Y - currentY) mod 16 when (X >= currentX and X < (currentX + 16)) else 0;
 	-- Compute if we are on character
 	characterPresent <= '1' when (X >= currentX) and (X < (currentX + 16)) and (Y >= currentY) and (Y < (currentY + 16)) else
 						'0';
+	
 	-- Last compute animationSeq
 	UpdateCharacterSprite : Process(vSync)
 	begin
