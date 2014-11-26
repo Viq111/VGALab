@@ -37,35 +37,44 @@ begin
 					7 when (command(0 to 3) = "0001") else  -- Only change when 1 button is pressed
 					direction;		
 	-- Second move the character each vSync (60 Hz)
-	MoveCharacter : Process(Clk, vSync)
-	
+	vSyncProcess : Process(vSync)
 	begin
-		If (vSync'Event and vSync = '1') then -- On each tick, we move closer to our target
-			If (targetX > currentX) then
-				currentX <= currentX + 1;
-			End If;
-			If (targetX < currentX) then
-				currentX <= currentX - 1;
-			End If;
-			If (targetY > currentY) then
-				currentX <= currentX + 1;
-			End If;
-			If (targetY > currentY) then
-				currentY <= currentY + 1;
-			End If;
-		End If;
+	   If (vSync'Event and vSync = '1') then -- On each tick, we move closer to our target
+                -- Let's count vSync
+                vSyncCounter <= vSyncCounter + 1;
+                If (vSyncCounter >= 12) then
+                    vSyncCounter <= 1;
+                End If;
+                
+                If (targetX > currentX) then
+                    currentX <= currentX + 1;
+                End If;
+                If (targetX < currentX) then
+                    currentX <= currentX - 1;
+                End If;
+                If (targetY > currentY) then
+                    currentX <= currentX + 1;
+                End If;
+                If (targetY > currentY) then
+                    currentY <= currentY + 1;
+                End If;
+            End If;
+	End Process;
+	-- Third check if movement
+	CharacterProcess : Process(Clk)
+	begin
 		If (currentX = targetX and currentY = targetY) then -- Ok we are here, wait for an action from the user
 			If (direction = 1 and X = (currentX + 8) and Y = (currentY + 17) and fixedWallPresent = '0' and breakWallPresent = '0') then -- Going down
-				currentY <= currentY + 1;
+				targetY <= targetY + 16;
 			End If;
 			If (direction = 3 and X = (currentX - 1) and Y = (currentY + 8) and fixedWallPresent = '0' and breakWallPresent = '0') then -- Going left
-				currentX <= currentX - 1;
+				targetX <= targetX - 16;
 			End If;
 			If (direction = 5 and X = (currentX + 8) and Y = (currentY - 1) and fixedWallPresent = '0' and breakWallPresent = '0') then
-				currentY <= currentY - 1;
+				targetY <= targetY - 16;
 			End If;
 			If (direction = 7 and X = (currentX + 17) and Y = (currentY + 8) and fixedWallPresent = '0' and breakWallPresent = '0') then
-				currentX <= currentX + 1;
+				targetX <= targetX + 16;
 			End If;
 	   End If;
 	End Process;
@@ -74,17 +83,6 @@ begin
 	-- Compute if we are on character
 	characterPresent <= '1' when (X >= currentX) and (X < (currentX + 16)) and (Y >= currentY) and (Y < (currentY + 16)) else
 						'0';
-	
-	-- Last compute animationSeq
-	UpdateCharacterSprite : Process(vSync)
-	begin
-		If (vSync'Event and vSync = '1') then
-			vSyncCounter <= vSyncCounter + 1;
-		End If;
-		If (vSyncCounter >= 12) then
-			vSyncCounter <= 1;
-		End If;
-	End Process;
 	animationSeq <= 1  when direction = 0 else
 					11 when direction = 2 else
 					21 when direction = 4 else
