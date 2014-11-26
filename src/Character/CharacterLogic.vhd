@@ -36,26 +36,26 @@ begin
 					7 when (command(0 to 3) = "0001") else  -- Only change when 1 button is pressed
 					direction;		
 	-- Second move the character each vSync (60 Hz)
-	MoveCharacter : Process(vSync)
+	MoveCharacter : Process(Clk, vSync)
 	begin
 		If (vSync'Event and vSync = '1') then
 			letsMove <= '1';
 		End If;
-		If (letsMove = '1' and direction = 1 and X = (currentX + 17) and Y = (currentY + 8) and fixedWallPresent = '0' and breakWallPresent = '0') then
+		If (letsMove = '1' and direction = 1 and X = (currentX + 8) and Y = (currentY + 17) and fixedWallPresent = '0' and breakWallPresent = '0') then
 			letsMove <= '0';
-			currentX <= currentX + 1;
+			currentY <= currentY + 1;
 		End If;
-		If (letsMove = '1' and direction = 3 and X = (currentX + 8) and Y = (currentY - 1) and fixedWallPresent = '0' and breakWallPresent = '0') then
-			letsMove <= '0';
-			currentY <= currentY - 1;
-		End If;
-		If (letsMove = '1' and direction = 5 and X = (currentX - 1) and Y = (currentY + 8) and fixedWallPresent = '0' and breakWallPresent = '0') then
+		If (letsMove = '1' and direction = 3 and X = (currentX - 1) and Y = (currentY + 8) and fixedWallPresent = '0' and breakWallPresent = '0') then
 			letsMove <= '0';
 			currentX <= currentX - 1;
 		End If;
-		If (letsMove = '1' and direction = 7 and X = (currentX + 8) and Y = (currentY + 17) and fixedWallPresent = '0' and breakWallPresent = '0') then
+		If (letsMove = '1' and direction = 5 and X = (currentX + 8) and Y = (currentY - 1) and fixedWallPresent = '0' and breakWallPresent = '0') then
 			letsMove <= '0';
-			currentY <= currentY + 1;
+			currentY <= currentY - 1;
+		End If;
+		If (letsMove = '1' and direction = 7 and X = (currentX + 17) and Y = (currentY + 8) and fixedWallPresent = '0' and breakWallPresent = '0') then
+			letsMove <= '0';
+			currentX <= currentX + 1;
 		End If;
 	End Process;
 	relativeX <= (X - currentX) mod 16 when (X >= currentX and X < (currentX + 16)) else 0;
