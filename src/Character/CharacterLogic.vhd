@@ -25,21 +25,39 @@ signal direction : INTEGER := 0;
 signal vSyncCounter : INTEGER := 1;
 -- Direction: 0 down idle, 1 down moving, 2 left idle, 3 left moving, 4 up idle, 5 up moving, 6 right idle, 7 right moving
 begin
-	-- ToDo : Manage External events
-	-- First change direction
-	direction <= 	0 when (direction = 1) and (command(0 to 3) = "0000") else -- When no command is pressed idle
-					2 when (direction = 3) and (command(0 to 3) = "0000") else -- When no command is pressed idle
-					4 when (direction = 5) and (command(0 to 3) = "0000") else -- When no command is pressed idle
-					6 when (direction = 7) and (command(0 to 3) = "0000") else -- When no command is pressed idle
-					1 when (command(0 to 3) = "1000") else	-- Only change when 1 button is pressed
-					3 when (command(0 to 3) = "0100") else	-- Only change when 1 button is pressed
-					5 when (command(0 to 3) = "0010") else	-- Only change when 1 button is pressed
-					7 when (command(0 to 3) = "0001") else  -- Only change when 1 button is pressed
-					direction;		
-	-- Second move the character each vSync (60 Hz)
+	-- ToDo : Manage External events	
+	-- Move the character each vSync (60 Hz)
 	vSyncProcess : Process(vSync)
 	begin
 	   If (vSync'Event and vSync = '1') then -- On each tick, we move closer to our target
+				-- Check direction
+				If (command(0 to 3) = "0000") then
+					If (direction = 1) then
+						direction <= 0;
+					End If;
+					If (direction = 3) then
+						direction <= 2;
+					End If;
+					If (direction = 5) then
+						direction <= 4;
+					End If;
+					If (direction = 7) then
+						direction <= 6;
+					End If;
+				Else
+					If (command(0 to 3) = "1000") then
+						direction <= 1;
+					End If;
+					If (command(0 to 3) = "0100") then
+						direction <= 3;
+					End If;
+					If (command(0 to 3) = "0010") then
+						direction <= 5;
+					End If;
+					If (command(0 to 3) = "0001") then
+						direction <= 7;
+					End If;
+				End If;
                 -- Let's count vSync
                 vSyncCounter <= vSyncCounter + 1;
                 If (vSyncCounter >= 12) then
@@ -53,29 +71,31 @@ begin
                     currentX <= currentX - 1;
                 End If;
                 If (targetY > currentY) then
-                    currentX <= currentX + 1;
-                End If;
-                If (targetY > currentY) then
                     currentY <= currentY + 1;
+                End If;
+                If (targetY < currentY) then
+                    currentY <= currentY - 1;
                 End If;
             End If;
 	End Process;
 	-- Third check if movement
 	CharacterProcess : Process(Clk)
 	begin
-		If (currentX = targetX and currentY = targetY) then -- Ok we are here, wait for an action from the user
-			If (direction = 1 and X = (currentX + 8) and Y = (currentY + 17) and fixedWallPresent = '0' and breakWallPresent = '0') then -- Going down
-				targetY <= targetY + 16;
-			End If;
-			If (direction = 3 and X = (currentX - 1) and Y = (currentY + 8) and fixedWallPresent = '0' and breakWallPresent = '0') then -- Going left
-				targetX <= targetX - 16;
-			End If;
-			If (direction = 5 and X = (currentX + 8) and Y = (currentY - 1) and fixedWallPresent = '0' and breakWallPresent = '0') then
-				targetY <= targetY - 16;
-			End If;
-			If (direction = 7 and X = (currentX + 17) and Y = (currentY + 8) and fixedWallPresent = '0' and breakWallPresent = '0') then
-				targetX <= targetX + 16;
-			End If;
+		If (Clk'Event and Clk = '1') then
+			If (currentX = targetX and currentY = targetY) then -- Ok we are here, wait for an action from the user
+				If (direction = 1 and X = (currentX + 8) and Y = (currentY + 17) and fixedWallPresent = '0' and breakWallPresent = '0') then -- Going down
+					targetY <= targetY + 16;
+				End If;
+				If (direction = 3 and X = (currentX - 1) and Y = (currentY + 8) and fixedWallPresent = '0' and breakWallPresent = '0') then -- Going left
+					targetX <= targetX - 16;
+				End If;
+				If (direction = 5 and X = (currentX + 8) and Y = (currentY - 1) and fixedWallPresent = '0' and breakWallPresent = '0') then
+					targetY <= targetY - 16;
+				End If;
+				If (direction = 7 and X = (currentX + 17) and Y = (currentY + 8) and fixedWallPresent = '0' and breakWallPresent = '0') then
+					targetX <= targetX + 16;
+				End If;
+		   End If;
 	   End If;
 	End Process;
 	relativeX <= (X - currentX) mod 16 when (X >= currentX and X < (currentX + 16)) else 0;
