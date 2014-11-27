@@ -24,12 +24,14 @@ architecture Behavioral of GraphicEngine is
     signal Y : INTEGER := 0;
     signal drawAvailable : STD_LOGIC := '0';
 	signal external : INTEGER := 0;
+	signal breakWallInteract : STD_LOGIC := '0';
 	signal s_vSync : STD_LOGIC;
     -- All MUX
     signal fixedWallPresent : STD_LOGIC := '0';
 	signal breakWallPresent : STD_LOGIC := '0';
 	signal characterPresent : STD_LOGIC := '0';
     signal RGBWall : STD_LOGIC_VECTOR (0 to 2);
+	signal RGBBreakWall : STD_LOGIC_VECTOR (0 to 2);
 	signal RGBChar : STD_LOGIC_VECTOR (0 to 2);
     -- Clock Divider
     component Clock_Generator
@@ -52,6 +54,7 @@ architecture Behavioral of GraphicEngine is
                 -- Add each Sprite here
                 RGB1 : in STD_LOGIC_VECTOR (0 to 2);
                 RGB2 : in STD_LOGIC_VECTOR (0 to 2);
+                RGB3 : in STD_LOGIC_VECTOR (0 to 2);
                 RGB : out STD_LOGIC_VECTOR (0 to 11) );
     end component;
     -- Sprites
@@ -62,6 +65,15 @@ architecture Behavioral of GraphicEngine is
             wallPresent : out STD_LOGIC;
             RGB : out STD_LOGIC_VECTOR ( 0 to 2) );
     end component;
+    -- breakableWall
+    component DestructibleWall is
+        Port (  X : in INTEGER;
+                Y : in INTEGER;
+                Clk : in STD_LOGIC;
+                wallPresent : out STD_LOGIC;
+                RGB : out STD_LOGIC_VECTOR ( 0 to 2);
+                Interact : in STD_LOGIC );
+    end component;    
 	-- Character
 	component Character
 		Port ( 	X : in INTEGER;
@@ -80,6 +92,7 @@ begin
     Clock : Clock_Generator port map ( Clk, VGAClk);
     Sync :  VGASync port map ( VGAClk, X, Y, drawAvailable, hSync, s_vSync);
     Wall : FixedWall port map (X, Y, Clk, fixedWallPresent, RGBWall);
+	breakWall : DestructibleWall port map (X, Y, Clk, BreakwallPresent, RGBBreakWall, breakWallInteract);
 	char : Character port map (X, Y, external, command, Clk, s_vSync, fixedWallPresent, breakWallPresent, characterPresent, RGBChar);
-    Muxer : MUX port map ( drawAvailable, RGBWall, RGBChar, RGB );
+    Muxer : MUX port map ( drawAvailable, RGBWall, RGBBreakWall, RGBChar, RGB );
 end Behavioral;
