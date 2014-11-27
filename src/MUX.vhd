@@ -11,11 +11,12 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity MUX is
-    Port ( drawAvailable : in STD_LOGIC;
-           -- Add each Sprite here
-           RGB1 : in STD_LOGIC_VECTOR (0 to 2);
-		   RGB2	: in STD_LOGIC_VECTOR (0 to 2);
-		   RGB : out STD_LOGIC_VECTOR (0 to 11) );
+    Port (	drawAvailable : in STD_LOGIC;
+			-- Add each Sprite here
+			RGB1 : in STD_LOGIC_VECTOR (0 to 2);
+			RGB2 : in STD_LOGIC_VECTOR (0 to 2);
+			RGB3 : in STD_LOGIC_VECTOR (0 to 2);
+			RGB : out STD_LOGIC_VECTOR (0 to 11) );
 end MUX;
 
 architecture Behavioral of MUX is

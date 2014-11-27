@@ -11,25 +11,27 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity GraphicEngine is
-    Port ( Clk : in STD_LOGIC;
-    hSync : out STD_LOGIC;
-    vSync : out STD_LOGIC;
-    RGB : out STD_LOGIC_VECTOR (0 to 11);
-    Interact : in STD_LOGIC := '0' );
+    Port (	Clk : in STD_LOGIC;
+			command : in STD_LOGIC_VECTOR (0 to 5);
+			hSync : out STD_LOGIC;
+			vSync : out STD_LOGIC;
+			RGB : out STD_LOGIC_VECTOR (0 to 11) );
 end GraphicEngine;
 
 architecture Behavioral of GraphicEngine is
     signal VGAClk : STD_LOGIC;
-    signal X : INTEGER;
-    signal Y : INTEGER;
-    signal drawAvailable : STD_LOGIC;
+    signal X : INTEGER := 0;
+    signal Y : INTEGER := 0;
+    signal drawAvailable : STD_LOGIC := '0';
+	signal external : INTEGER := 0;
+	signal s_vSync : STD_LOGIC;
     -- All MUX
-    signal wallPresent : STD_LOGIC;
-    signal RGBWAll : STD_LOGIC_VECTOR (0 to 2);
-	
-	signal BreakwallPresent : STD_LOGIC;
+    signal fixedWallPresent : STD_LOGIC := '0';
+	signal breakWallPresent : STD_LOGIC := '0';
+	signal characterPresent : STD_LOGIC := '0';
+    signal RGBWall : STD_LOGIC_VECTOR (0 to 2);
 	signal RGBBreakWall : STD_LOGIC_VECTOR (0 to 2);
-	--signal Interact : STD_LOGIC;
+	signal RGBChar : STD_LOGIC_VECTOR (0 to 2);
     -- Clock Divider
     component Clock_Generator
         port( Clk : in std_logic;
@@ -61,18 +63,25 @@ architecture Behavioral of GraphicEngine is
             wallPresent : out STD_LOGIC;
             RGB : out STD_LOGIC_VECTOR ( 0 to 2) );
     end component;
-	component DestructibleWall
-	Port (	X : in INTEGER;
-			Y : in INTEGER;
-			Clk : in STD_LOGIC;
-			wallPresent : out STD_LOGIC;
-			RGB : out STD_LOGIC_VECTOR ( 0 to 2 );
-			Interact : in STD_LOGIC );
+	-- Character
+	component Character
+		Port ( 	X : in INTEGER;
+				Y : in INTEGER;
+				external : in INTEGER;
+				command : in STD_LOGIC_VECTOR (0 to 5);
+				Clk : in STD_LOGIC;
+				vSync : in STD_LOGIC;
+				fixedWallPresent : in STD_LOGIC;
+				breakWallPresent : in STD_LOGIC;
+				characterPresent : out STD_LOGIC;
+				RGB : out STD_LOGIC_VECTOR ( 0 to 2) );
 	end component;
 begin
+    vSync <= s_vSync;
     Clock : Clock_Generator port map ( Clk, VGAClk);
-    Sync :  VGASync port map ( VGAClk, X, Y, drawAvailable, hSync, vSync);
-    Wall : FixedWall port map (X, Y, Clk, wallPresent, RGBWall);
-	BreakWall : DestructibleWall port map (X, Y, Clk, BreakwallPresent, RGBBreakWall, Interact);
-    Muxer : MUX port map ( drawAvailable, RGBWall, RGBBreakWall, RGB );
+    Sync :  VGASync port map ( VGAClk, X, Y, drawAvailable, hSync, s_vSync);
+    Wall : FixedWall port map (X, Y, Clk, fixedWallPresent, RGBWall);
+	breakWall : DestructibleWall port map (X, Y, Clk, BreakwallPresent, RGBBreakWall, external);
+	char : Character port map (X, Y, external, command, Clk, s_vSync, fixedWallPresent, breakWallPresent, characterPresent, RGBChar);
+    Muxer : MUX port map ( drawAvailable, RGBWall, RGBChar, RGB );
 end Behavioral;
