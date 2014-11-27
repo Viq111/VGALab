@@ -53,7 +53,7 @@ begin
 	process(Clk)
 	begin
 		if( Clk'Event and Clk = '1' ) then
-			If ((X >= 8 and Y >= 8 ) and (X <= (640-8) and Y <= (480-8) )) then
+			If ((X >= 8 and Y >= 8 ) and (X < (640-8) and Y < (480-8) )) then
 				If WallLocation((((Y+8)/16)-1), (((X+8)/16)-1)) = '1' then
 					drawIt <= '1';
 				Else
