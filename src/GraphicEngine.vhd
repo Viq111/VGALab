@@ -23,6 +23,7 @@ architecture Behavioral of GraphicEngine is
     signal X : INTEGER;
     signal Y : INTEGER;
     signal drawAvailable : STD_LOGIC;
+    signal s_vSync : STD_LOGIC;
     -- All MUX
     signal wallPresent : STD_LOGIC;
     signal RGBWAll : STD_LOGIC_VECTOR (0 to 2);
@@ -32,6 +33,7 @@ architecture Behavioral of GraphicEngine is
 	
 	signal BombePresent : STD_LOGIC;
 	signal RGBBombe : STD_LOGIC_VECTOR (0 to 2);
+	signal ExplodeWall : STD_LOGIC;
 	--signal Interact : STD_LOGIC;
     -- Clock Divider
     component Clock_Generator
@@ -54,6 +56,7 @@ architecture Behavioral of GraphicEngine is
                 -- Add each Sprite here
                 RGB1 : in STD_LOGIC_VECTOR (0 to 2);
                 RGB2 : in STD_LOGIC_VECTOR (0 to 2);
+                RGB3 : in STD_LOGIC_VECTOR (0 to 2);
                 RGB : out STD_LOGIC_VECTOR (0 to 11) );
     end component;
     -- Sprites
@@ -79,13 +82,15 @@ architecture Behavioral of GraphicEngine is
 			vSync : in STD_LOGIC;
 			bombePresent : out STD_LOGIC;
 			RGB : out STD_LOGIC_VECTOR ( 0 to 2 );
-			Interact : in STD_LOGIC );
+			Interact : in STD_LOGIC;
+			Explode : out STD_LOGIC );
 	end component;
 begin
+    vSync <= s_vSync;
     Clock : Clock_Generator port map ( Clk, VGAClk);
-    Sync :  VGASync port map ( VGAClk, X, Y, drawAvailable, hSync, vSync);
+    Sync :  VGASync port map ( VGAClk, X, Y, drawAvailable, hSync, s_vSync);
     Wall : FixedWall port map (X, Y, Clk, wallPresent, RGBWall);
-	BreakWall : DestructibleWall port map (X, Y, Clk, BreakwallPresent, RGBBreakWall, Interact);
-	Bombe : Bombe port map (X, Y, Clk, vSync, BombePresent, RGBBombe, Interact);
+	BreakWall : DestructibleWall port map (X, Y, Clk, BreakwallPresent, RGBBreakWall, ExplodeWall);
+	ExplodeBombe : Bombe port map (X, Y, Clk, s_vSync, BombePresent, RGBBombe, Interact, ExplodeWall);
     Muxer : MUX port map ( drawAvailable, RGBWall, RGBBreakWall, RGBBombe, RGB );
 end Behavioral;

@@ -38,5 +38,5 @@ architecture Behavioral of Bombe is
 begin
     bombePresent <= s_bombePresent;
 	conversion : BombeLocalCoordinates port map (Clk, X, Y, relativeX, relativeY, s_bombePresent, Interact, Explode, vSync);
-	sprite : BombeSprite port map(relativeX, relativeY, s_wallPresent, RGB);
+	sprite : BombeSprite port map(relativeX, relativeY, s_bombePresent, RGB);
 end Behavioral;
