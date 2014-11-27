@@ -14,7 +14,8 @@ entity GraphicEngine is
     Port ( Clk : in STD_LOGIC;
     hSync : out STD_LOGIC;
     vSync : out STD_LOGIC;
-    RGB : out STD_LOGIC_VECTOR (0 to 11) );
+    RGB : out STD_LOGIC_VECTOR (0 to 11);
+    Interact : in STD_LOGIC := '0' );
 end GraphicEngine;
 
 architecture Behavioral of GraphicEngine is
@@ -28,6 +29,7 @@ architecture Behavioral of GraphicEngine is
 	
 	signal BreakwallPresent : STD_LOGIC;
 	signal RGBBreakWall : STD_LOGIC_VECTOR (0 to 2);
+	--signal Interact : STD_LOGIC;
     -- Clock Divider
     component Clock_Generator
         port( Clk : in std_logic;
@@ -64,12 +66,13 @@ architecture Behavioral of GraphicEngine is
 			Y : in INTEGER;
 			Clk : in STD_LOGIC;
 			wallPresent : out STD_LOGIC;
-			RGB : out STD_LOGIC_VECTOR ( 0 to 2 ) );
+			RGB : out STD_LOGIC_VECTOR ( 0 to 2 );
+			Interact : in STD_LOGIC );
 	end component;
 begin
     Clock : Clock_Generator port map ( Clk, VGAClk);
     Sync :  VGASync port map ( VGAClk, X, Y, drawAvailable, hSync, vSync);
     Wall : FixedWall port map (X, Y, Clk, wallPresent, RGBWall);
-	BreakWall : DestructibleWall port map (X, Y, Clk, BreakwallPresent, RGBBreakWall);
+	BreakWall : DestructibleWall port map (X, Y, Clk, BreakwallPresent, RGBBreakWall, Interact);
     Muxer : MUX port map ( drawAvailable, RGBWall, RGBBreakWall, RGB );
 end Behavioral;

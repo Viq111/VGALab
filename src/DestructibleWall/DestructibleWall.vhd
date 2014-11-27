@@ -8,7 +8,8 @@ entity DestructibleWall is
 			Y : in INTEGER;
 			Clk : in STD_LOGIC;
 			wallPresent : out STD_LOGIC;
-			RGB : out STD_LOGIC_VECTOR ( 0 to 2) );
+			RGB : out STD_LOGIC_VECTOR ( 0 to 2);
+			Interact : in STD_LOGIC );
 end DestructibleWall;
 
 architecture Behavioral of DestructibleWall is
@@ -21,7 +22,8 @@ architecture Behavioral of DestructibleWall is
 				Y : in INTEGER;
 				relativeX : out INTEGER;
 				relativeY : out INTEGER;
-				drawIt : out STD_LOGIC );
+				drawIt : out STD_LOGIC;
+				Interact : in STD_LOGIC	);
 	end component;
 	component DestructibleWallSprite is
 	    Port (	relativeX : in INTEGER;
@@ -31,6 +33,6 @@ architecture Behavioral of DestructibleWall is
 	end component;
 begin
     wallPresent <= s_wallPresent;
-	conversion : DestructibleWallLocalCoordinates port map (Clk, X, Y, relativeX, relativeY, s_wallPresent);
+	conversion : DestructibleWallLocalCoordinates port map (Clk, X, Y, relativeX, relativeY, s_wallPresent, Interact);
 	sprite : DestructibleWallSprite port map(relativeX, relativeY, s_wallPresent, RGB);
 end Behavioral;

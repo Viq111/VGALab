@@ -28,3 +28,6 @@ set_property PACKAGE_PIN AB19 [get_ports {RGB[11]}]
 set_property PACKAGE_PIN Y9 [get_ports Clk]
 set_property PACKAGE_PIN AA19 [get_ports hSync]
 set_property PACKAGE_PIN Y19 [get_ports vSync]
+
+set_property PACKAGE_PIN P16 [get_ports Interact]
+set_property IOSTANDARD LVCMOS33 [get_ports Interact]
