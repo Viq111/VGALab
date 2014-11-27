@@ -64,7 +64,7 @@ begin
 		if( Clk'Event and Clk = '1' ) then
 			-- Draw Bombe
 			If ((X >= 8 and Y >= 8 ) and (X < (640-8) and Y < (480-8) )) then
-				If BombeLocation((((Y+8)/16)-1), (((X+8)/16)-1)) = 1 then
+				If BombeLocation((((Y+8)/16)-1), (((X+8)/16)-1)) > 0 then
 					drawIt <= '1';
 				Else
 					drawIt <= '0';
