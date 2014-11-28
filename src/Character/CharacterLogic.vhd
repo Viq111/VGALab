@@ -5,13 +5,14 @@ entity CharacterLogic is
 	Port ( 	X : in INTEGER;
 			Y : in INTEGER;
 			explosionPresent : in STD_LOGIC;
-			command : in STD_LOGIC_VECTOR ( 0 to 5); -- 0 to 3 is down, left, up, right
+			command : in STD_LOGIC_VECTOR ( 0 to 5 ); -- 0 to 3 is down, left, up, right
 			Clk : in STD_LOGIC;
 			vSync : in STD_LOGIC;
 			fixedWallPresent : in STD_LOGIC;
 			breakWallPresent : in STD_LOGIC;
 			relativeX : out INTEGER;
 			relativeY : out INTEGER;
+			putBomb : out STD_LOGIC;
 			characterPresent : out STD_LOGIC;
 			animationSeq : out INTEGER );
 end CharacterLogic;
@@ -25,7 +26,7 @@ signal direction : INTEGER := 0;
 signal vSyncCounter : INTEGER := 1;
 -- Direction: 0 down idle, 1 down moving, 2 left idle, 3 left moving, 4 up idle, 5 up moving, 6 right idle, 7 right moving
 begin
-	-- ToDo : Manage External events	
+	-- ToDo : When explosionPresent, Kill the character
 	-- Move the character each vSync (60 Hz)
 	vSyncProcess : Process(vSync)
 	begin
@@ -103,6 +104,13 @@ begin
 	-- Compute if we are on character
 	characterPresent <= '1' when (X >= currentX) and (X < (currentX + 16)) and (Y >= currentY) and (Y < (currentY + 16)) else
 						'0';
+						
+	-- Put a bomb on the character
+	-- We use target instead of current, because we do not want to put a bomb in middle of 2 points
+	putBomb <= 	'1' when ((X >= targetX) and (X < (targetX + 16)) and (Y >= targetY) and (Y < (targetY + 16))) and command(3) = '1' else
+				'0';
+	
+	
 	animationSeq <= 1  when direction = 0 else
 					11 when direction = 2 else
 					21 when direction = 4 else
