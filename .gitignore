@@ -1,6 +1,7 @@
 *.cache
 *.sim
 *.runs
+*.ioplanning
 vivado.jou
 vivado.log
 vivado_pid*.str
@@ -8,3 +9,4 @@ hs_err_pid*
 *.hw
 *.backup.*
 *.debug
+*.tmp
