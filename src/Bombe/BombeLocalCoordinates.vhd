@@ -9,13 +9,11 @@ entity BombeLocalCoordinates is
 			relativeX : out INTEGER;
 			relativeY : out INTEGER;
 			drawIt : out STD_LOGIC;
-			Interact : in STD_LOGIC;
-			Explode : out STD_LOGIC := '0';
-			vSync : in STD_LOGIC );
+			putBomb : in STD_LOGIC;
+			explosionPresent : out STD_LOGIC ); -- Whether an explosion is present here
 end BombeLocalCoordinates;
 
 architecture Behavioral of BombeLocalCoordinates is
-
 type matrix is array(0 to 28, 0 to 38) of INTEGER range 0 to 30;
 signal BombeLocation : matrix := (	
 									(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),
@@ -48,23 +46,17 @@ signal BombeLocation : matrix := (
 									(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),
 									(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
 								);
---signal BombePresent : STD_LOGIC := '0';
-signal BombeCounter : INTEGER := 0;
 signal TimeCounter : INTEGER := 0;
---signal BombeX : INTEGER := 0;
---signal BombeY : INTEGER := 0;
-signal s_Explode : STD_LOGIC := '0';
-
 begin
-    Explode <= s_Explode;
 	relativeX <= (X+8) mod 16;
 	relativeY <= (Y+8) mod 16;
+	
 	process(Clk)
 	begin
 		if( Clk'Event and Clk = '1' ) then
-			-- Draw Bombe
+			-- Draw Bomb if present
 			If ((X >= 8 and Y >= 8 ) and (X < (640-8) and Y < (480-8) )) then
-				If BombeLocation((((Y+8)/16)-1), (((X+8)/16)-1)) > 0 then
+				If BombeLocation((((Y+8)/16)-1), (((X+8)/16)-1)) > 0 then -- There is a bomb here
 					drawIt <= '1';
 				Else
 					drawIt <= '0';
@@ -72,53 +64,33 @@ begin
 			Else
 				drawIt <= '0';
 			End If;
-			-- Pose
+			
+			-- Put a bomb down
 			If ((X >= 8 and Y >= 8 ) and (X < (640-8) and Y < (480-8) )) then
-				If (BombeLocation((((Y+8)/16)-1), (((X+8)/16)-1)) = 0 and Interact = '1') then
+				If (BombeLocation((((Y+8)/16)-1), (((X+8)/16)-1)) = 0 and putBomb = '1') then -- There is not yet a bomb here, and we want to put one
 					BombeLocation((((Y+8)/16)-1), (((X+8)/16)-1)) <= 1;
-					--BombeX <= (((X+8)/16)-1);
-					--BombeY <= (((Y+8)/16)-1);
-					---BombePresent <= '1';
 				End If;
 			End If;
 			
-			--Time Bombe
+			-- Update bomb timer
+			-- Clk is 100 MHz
 			TimeCounter <= TimeCounter + 1;
-			If (TimeCounter >= 10000000) then
+			If (TimeCounter >= 10000000) then -- This clock is 10 Hz -> 100ms
+				-- Every 10 Hz, update the timer of the bomb
 				For i in 0 to 28 loop
 					For j in 0 to 38 loop
-						If (BombeLocation(i,j) >= 26) then
-							s_Explode <= '0';
+						If (BombeLocation(i,j) >= 24) then -- Bomb has been destroyed
 							BombeLocation(i,j) <= 0;
-						ElsIf (BombeLocation(i,j) >= 25) then
-							s_Explode <= '1';
-						ElsIf (BombeLocation(i,j) > 0) then
+						ElsIf (BombeLocation(i,j) > 0) then -- Add time to the bomb
 							BombeLocation(i,j) <= BombeLocation(i,j) + 1;
 						End If;
 					End loop;
 				End loop;
 				TimeCounter <= 0;
 			End If;
+			
+			-- ToDo: Update bomb explosion
 	
 		end if;
 	end process; 
-	
-	
---	process(vSync)
---	begin
---		If( vSync'Event and vSync = '1' ) then	
---			-- Count Bombe
---			If (BombePresent = '1') then
---				BombeCounter <= BombeCounter + 1;
---				If (BombeCounter >= 120 and s_Explode = '0') then
---					s_Explode <= '1';
---				ElsIf (BombeCounter >= 125 and s_Explode = '1') then
---					s_Explode <= '0';
---					BombeCounter <= 0;
---					BombePresent <= '0';
---					BombeLocation(BombeY, BombeX) <= '0';
---				End If;
---			End If;
---	   End If;
---	end process; 
 end Behavioral;

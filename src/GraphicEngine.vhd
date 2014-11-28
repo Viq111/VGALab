@@ -29,7 +29,7 @@ architecture Behavioral of GraphicEngine is
     -- All MUX
     signal fixedWallPresent : STD_LOGIC := '0';
 	signal breakWallPresent : STD_LOGIC := '0';
-	signal bombePresent : STD_LOGIC := '0';
+	signal bombPresent : STD_LOGIC := '0';
 	signal characterPresent : STD_LOGIC := '0';
     signal RGBWall : STD_LOGIC_VECTOR (0 to 2);
 	signal RGBBreakWall : STD_LOGIC_VECTOR (0 to 2);
@@ -87,6 +87,7 @@ architecture Behavioral of GraphicEngine is
 				vSync : in STD_LOGIC;
 				fixedWallPresent : in STD_LOGIC;
 				breakWallPresent : in STD_LOGIC;
+				bombPresent : in STD_LOGIC;
 				putBomb : out STD_LOGIC;
 				characterPresent : out STD_LOGIC;
 				RGB : out STD_LOGIC_VECTOR ( 0 to 2) );
@@ -95,11 +96,10 @@ architecture Behavioral of GraphicEngine is
 	Port (	X : in INTEGER;
 			Y : in INTEGER;
 			Clk : in STD_LOGIC;
-			vSync : in STD_LOGIC;
 			bombePresent : out STD_LOGIC;
 			RGB : out STD_LOGIC_VECTOR ( 0 to 2 );
-			Interact : in STD_LOGIC;
-			Explode : out STD_LOGIC );
+			putBomb : in STD_LOGIC;
+			explosionPresent : out STD_LOGIC );
 	end component;
 begin
     vSync <= s_vSync;
@@ -107,7 +107,7 @@ begin
     Sync :  VGASync port map ( VGAClk, X, Y, drawAvailable, hSync, s_vSync);
     Wall : FixedWall port map (X, Y, Clk, fixedWallPresent, RGBWall);
 	breakWall : DestructibleWall port map (X, Y, Clk, BreakwallPresent, RGBBreakWall, explosionPresent);
-	char : Character port map (X, Y, explosionPresent, command, Clk, s_vSync, fixedWallPresent, breakWallPresent, putBomb, characterPresent, RGBChar);
-	ExplodeBombe : Bombe port map (X, Y, Clk, s_vSync, bombePresent, RGBBombe, putBomb, explosionPresent);
+	char : Character port map (X, Y, explosionPresent, command, Clk, s_vSync, fixedWallPresent, breakWallPresent, bombPresent, putBomb, characterPresent, RGBChar);
+	ExplodeBombe : Bombe port map (X, Y, Clk, bombPresent, RGBBombe, putBomb, explosionPresent);
     Muxer : MUX port map ( drawAvailable, RGBWall, RGBBreakWall, RGBBombe, RGBChar, RGB );
 end Behavioral;

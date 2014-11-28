@@ -10,6 +10,7 @@ entity CharacterLogic is
 			vSync : in STD_LOGIC;
 			fixedWallPresent : in STD_LOGIC;
 			breakWallPresent : in STD_LOGIC;
+			bombPresent : in STD_LOGIC;
 			relativeX : out INTEGER;
 			relativeY : out INTEGER;
 			putBomb : out STD_LOGIC;
@@ -84,16 +85,16 @@ begin
 	begin
 		If (Clk'Event and Clk = '1') then
 			If (currentX = targetX and currentY = targetY) then -- Ok we are here, wait for an action from the user
-				If (direction = 1 and X = (currentX + 8) and Y = (currentY + 17) and fixedWallPresent = '0' and breakWallPresent = '0') then -- Going down
+				If (direction = 1 and X = (currentX + 8) and Y = (currentY + 17) and fixedWallPresent = '0' and breakWallPresent = '0' and bombPresent = '0') then -- Going down
 					targetY <= targetY + 16;
 				End If;
-				If (direction = 3 and X = (currentX - 1) and Y = (currentY + 8) and fixedWallPresent = '0' and breakWallPresent = '0') then -- Going left
+				If (direction = 3 and X = (currentX - 1) and Y = (currentY + 8) and fixedWallPresent = '0' and breakWallPresent = '0' and bombPresent = '0') then -- Going left
 					targetX <= targetX - 16;
 				End If;
-				If (direction = 5 and X = (currentX + 8) and Y = (currentY - 1) and fixedWallPresent = '0' and breakWallPresent = '0') then
+				If (direction = 5 and X = (currentX + 8) and Y = (currentY - 1) and fixedWallPresent = '0' and breakWallPresent = '0' and bombPresent = '0') then
 					targetY <= targetY - 16;
 				End If;
-				If (direction = 7 and X = (currentX + 17) and Y = (currentY + 8) and fixedWallPresent = '0' and breakWallPresent = '0') then
+				If (direction = 7 and X = (currentX + 17) and Y = (currentY + 8) and fixedWallPresent = '0' and breakWallPresent = '0' and bombPresent = '0') then
 					targetX <= targetX + 16;
 				End If;
 		   End If;
