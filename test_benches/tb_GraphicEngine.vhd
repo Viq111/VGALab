@@ -13,24 +13,27 @@ ARCHITECTURE behavior OF tb_GraphicEngine IS
 COMPONENT GraphicEngine
 PORT (
     Clk : IN STD_LOGIC;
+    command : IN STD_LOGIC_VECTOR(0 to 5);
     hSync : OUT STD_LOGIC;
     vSync : OUT STD_LOGIC;
-    RGB : OUT STD_LOGIC_VECTOR (0 to 11)
+    RGB : OUT STD_LOGIC_VECTOR(0 to 11)
 );
 END COMPONENT;
 -- declare inputs and initialize them
     signal Clk : STD_LOGIC;
+    signal command : STD_LOGIC_VECTOR(0 to 5);
 -- declare inouts and initialize them
 -- declare outputs and initialize them
     signal hSync : STD_LOGIC;
     signal vSync : STD_LOGIC;
-    signal RGB : STD_LOGIC_VECTOR (0 to 11);
+    signal RGB : STD_LOGIC_VECTOR(0 to 11);
 constant clk_period : time := 10 ns;
 
 BEGIN
 -- Instantiate the Unit Under Test (UUT)
 uut: GraphicEngine PORT MAP (
     Clk => Clk,
+    command => command,
     hSync => hSync,
     vSync => vSync,
     RGB => RGB
@@ -46,8 +49,9 @@ end process;
 -- Stimulus process
 stim_proc: process
 begin
-wait for 3*clk_period;
--- Insert your tests
-   wait;
+    command <= "000100";
+    wait for clk_period*1000000;
+    command <= "000000";
+    wait;
 end process;
 END;
