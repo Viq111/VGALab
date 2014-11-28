@@ -6,7 +6,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity Character is
 	Port ( 	X : in INTEGER;
 			Y : in INTEGER;
-			external : in INTEGER;
+			explosionPresent : in STD_LOGIC;
 			command : in STD_LOGIC_VECTOR (0 to 5);
 			Clk : in STD_LOGIC;
 			vSync : in STD_LOGIC;
@@ -24,7 +24,7 @@ architecture Behavioral of Character is
 	component CharacterLogic is
 		Port ( 	X : in INTEGER;
 				Y : in INTEGER;
-				external : in INTEGER;
+				explosionPresent : in STD_LOGIC;
 				command : in STD_LOGIC_VECTOR ( 0 to 5); -- 0 to 3 is down, left, up, right
 				Clk : in STD_LOGIC;
 				vSync : in STD_LOGIC;
@@ -44,6 +44,6 @@ architecture Behavioral of Character is
 	end component;
 begin
     characterPresent <= s_characterPresent;
-	logic : CharacterLogic port map (X, Y, external, command, Clk, vSync, fixedWallPresent, breakWallPresent, relativeX, relativeY, s_characterPresent, animationSeq);
+	logic : CharacterLogic port map (X, Y, explosionPresent, command, Clk, vSync, fixedWallPresent, breakWallPresent, relativeX, relativeY, s_characterPresent, animationSeq);
 	sprite : CharacterAnimatedSprite port map (relativeX, relativeY, s_characterPresent, animationSeq, RGB);
 end Behavioral;

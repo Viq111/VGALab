@@ -4,7 +4,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity CharacterLogic is
 	Port ( 	X : in INTEGER;
 			Y : in INTEGER;
-			external : in INTEGER;
+			explosionPresent : in STD_LOGIC;
 			command : in STD_LOGIC_VECTOR ( 0 to 5); -- 0 to 3 is down, left, up, right
 			Clk : in STD_LOGIC;
 			vSync : in STD_LOGIC;

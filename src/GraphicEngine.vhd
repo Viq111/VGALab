@@ -23,7 +23,7 @@ architecture Behavioral of GraphicEngine is
     signal X : INTEGER := 0;
     signal Y : INTEGER := 0;
     signal drawAvailable : STD_LOGIC := '0';
-	signal putBomb	: INTEGER := 0;
+	signal putBomb	: STD_LOGIC := '0';
 	signal explosionPresent : STD_LOGIC := '0';
 	signal s_vSync : STD_LOGIC;
     -- All MUX
@@ -57,6 +57,7 @@ architecture Behavioral of GraphicEngine is
                 RGB1 : in STD_LOGIC_VECTOR (0 to 2);
                 RGB2 : in STD_LOGIC_VECTOR (0 to 2);
                 RGB3 : in STD_LOGIC_VECTOR (0 to 2);
+				RGB4 : in STD_LOGIC_VECTOR (0 to 2);
                 RGB : out STD_LOGIC_VECTOR (0 to 11) );
     end component;
     -- Sprites
