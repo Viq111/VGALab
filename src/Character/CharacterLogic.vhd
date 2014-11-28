@@ -107,7 +107,7 @@ begin
 						
 	-- Put a bomb on the character
 	-- We use target instead of current, because we do not want to put a bomb in middle of 2 points
-	putBomb <= 	'1' when ((X >= targetX) and (X < (targetX + 16)) and (Y >= targetY) and (Y < (targetY + 16))) and command(3) = '1' else
+	putBomb <= 	'1' when ((X >= targetX) and (X < (targetX + 16)) and (Y >= targetY) and (Y < (targetY + 16))) and command(4) = '1' else
 				'0';
 	
 	
