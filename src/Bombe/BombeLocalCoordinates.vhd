@@ -57,8 +57,15 @@ begin
 			If ((X >= 8 and Y >= 8 ) and (X < (640-8) and Y < (480-8) )) then
 				If BombeLocation((((Y+8)/16)-1), (((X+8)/16)-1)) > 0 then -- There is a bomb here
 					drawIt <= '1';
+					-- Check if the bomb is currently exploding (for 5 ticks which is 500ms)
+					If (BombeLocation((((Y+8)/16)-1), (((X+8)/16)-1)) >= 20) then
+						bombDetonate <= '1';
+					Else
+						bombDetonate <= '0';
+					End If;
 				Else
 					drawIt <= '0';
+					bombDetonate <= '0';
 				End If;
 			Else
 				drawIt <= '0';
@@ -89,10 +96,6 @@ begin
 				End loop;
 				TimeCounter <= 0;
 			End If;
-			
-			-- ToDo: Update bomb explosion
-			bombDetonate <= '0';
-	
 		end if;
 	end process; 
 end Behavioral;
