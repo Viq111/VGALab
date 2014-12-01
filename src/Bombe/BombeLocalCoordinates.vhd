@@ -10,7 +10,7 @@ entity BombeLocalCoordinates is
 			relativeY : out INTEGER;
 			drawIt : out STD_LOGIC;
 			putBomb : in STD_LOGIC;
-			explosionPresent : out STD_LOGIC ); -- Whether an explosion is present here
+			bombDetonate : out STD_LOGIC ); -- Whether a bomb is exploding right here
 end BombeLocalCoordinates;
 
 architecture Behavioral of BombeLocalCoordinates is
@@ -50,7 +50,6 @@ signal TimeCounter : INTEGER := 0;
 begin
 	relativeX <= (X+8) mod 16;
 	relativeY <= (Y+8) mod 16;
-	
 	process(Clk)
 	begin
 		if( Clk'Event and Clk = '1' ) then
@@ -81,8 +80,10 @@ begin
 					For j in 0 to 38 loop
 						If (BombeLocation(i,j) >= 24) then -- Bomb has been destroyed
 							BombeLocation(i,j) <= 0;
-						ElsIf (BombeLocation(i,j) > 0) then -- Add time to the bomb
-							BombeLocation(i,j) <= BombeLocation(i,j) + 1;
+						Else
+							If (BombeLocation(i,j) > 0) then -- Add time to the bomb
+								BombeLocation(i,j) <= BombeLocation(i,j) + 1;
+							End If;
 						End If;
 					End loop;
 				End loop;
@@ -90,6 +91,7 @@ begin
 			End If;
 			
 			-- ToDo: Update bomb explosion
+			bombDetonate <= '0';
 	
 		end if;
 	end process; 

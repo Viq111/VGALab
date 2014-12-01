@@ -93,13 +93,15 @@ architecture Behavioral of GraphicEngine is
 				RGB : out STD_LOGIC_VECTOR ( 0 to 2) );
 	end component;
 	component Bombe
-	Port (	X : in INTEGER;
+	Port ( 	X : in INTEGER;
 			Y : in INTEGER;
 			Clk : in STD_LOGIC;
-			bombePresent : out STD_LOGIC;
-			RGB : out STD_LOGIC_VECTOR ( 0 to 2 );
 			putBomb : in STD_LOGIC;
-			explosionPresent : out STD_LOGIC );
+			fixedWallPresent : in STD_LOGIC;
+			breakableWallPresent : in STD_LOGIC;
+			bombePresent : out STD_LOGIC;
+			explosionPresent : out STD_LOGIC;
+			RGB : out STD_LOGIC_VECTOR ( 0 to 2) );
 	end component;
 begin
     vSync <= s_vSync;
@@ -108,6 +110,6 @@ begin
     Wall : FixedWall port map (X, Y, Clk, fixedWallPresent, RGBWall);
 	breakWall : DestructibleWall port map (X, Y, Clk, BreakwallPresent, RGBBreakWall, explosionPresent);
 	char : Character port map (X, Y, explosionPresent, command, Clk, s_vSync, fixedWallPresent, breakWallPresent, bombPresent, putBomb, characterPresent, RGBChar);
-	ExplodeBombe : Bombe port map (X, Y, Clk, bombPresent, RGBBombe, putBomb, explosionPresent);
+	ExplodeBombe : Bombe port map (X, Y, Clk, putBomb, fixedWallPresent, breakWallPresent, bombPresent, explosionPresent, RGBBombe);
     Muxer : MUX port map ( drawAvailable, RGBWall, RGBBreakWall, RGBBombe, RGBChar, RGB );
 end Behavioral;
