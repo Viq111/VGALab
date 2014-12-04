@@ -47,9 +47,11 @@ signal BombeLocation : matrix := (
 									(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
 								);
 signal TimeCounter : INTEGER := 0;
+signal hasDetonated : STD_LOGIC := '0';
 begin
 	relativeX <= (X+8) mod 16;
 	relativeY <= (Y+8) mod 16;
+	bombDetonate <= hasDetonated;
 	process(Clk)
 	begin
 		if( Clk'Event and Clk = '1' ) then
@@ -79,6 +81,7 @@ begin
 				For i in 0 to 28 loop
 					For j in 0 to 38 loop
 						If (BombeLocation(i,j) >= 24) then -- Bomb has been destroyed
+							hasDetonated <= '1';
 							BombeLocation(i,j) <= 0;
 						Else
 							If (BombeLocation(i,j) > 0) then -- Add time to the bomb
@@ -91,8 +94,6 @@ begin
 			End If;
 			
 			-- ToDo: Update bomb explosion
-			bombDetonate <= '0';
-	
 		end if;
 	end process; 
 end Behavioral;
