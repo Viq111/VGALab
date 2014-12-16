@@ -15,4 +15,4 @@ before_install:
 install:
   - python client.py --install $VIVADO_CI_SERVER $VIVADO_CI_PORT $REPOSITORY $TRAVIS_COMMIT $XPR_PATH
 script: 
-  - python client.py $VIVADO_CI_SERVER $VIVADO_CI_PORT $REPOSITORY $TRAVIS_COMMIT $XPR_PATH
+  - travis_wait python client.py $VIVADO_CI_SERVER $VIVADO_CI_PORT $REPOSITORY $TRAVIS_COMMIT $XPR_PATH
