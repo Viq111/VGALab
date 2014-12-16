@@ -4,8 +4,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 -- X,Y to Relative X,Y
 entity ExplosionLogic is
 	Port ( 	Clk : in STD_LOGIC;
-			X : in INTEGER;
-			Y : in INTEGER;
+			X : in INTEGER range 0 to 700;
+			Y : in INTEGER range 0 to 700;
 			staticWallPresent : in STD_LOGIC;
 			breakableWallPresent : in STD_LOGIC;
 			bombExploding : in STD_LOGIC;
@@ -47,8 +47,8 @@ signal explosionLocation : matrix := (
 								);
 begin
 	process(Clk)
-	variable matrixX : INTEGER;
-	variable matrixY : INTEGER;
+	variable matrixX : INTEGER range 0 to 50;
+	variable matrixY : INTEGER range 0 to 50;
 	variable neightbourExpl : STD_LOGIC; -- Tell if for the current iteration, there is a neightboor with an explosion
 	begin
 		If( Clk'Event and Clk = '1' ) then
